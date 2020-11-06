@@ -17,7 +17,13 @@ pipeline {
 			sh "docker run -d -p 82:80 --name=mywebsiteapp ayadav081116/mywebsiteapp:$BUILD_NUMBER"
          }
       }
-	stage('Push to Docker hub'){ 
+     stage('Website Test') {
+         agent { label 'Test' }
+         steps {
+           sh "java -jar /home/ubuntu/workspace/capstone/export_selenium1.jar"
+         }
+	  }
+    	stage('Push to Docker hub'){ 
 	agent { label 'Test' } 
         steps {
         	withDockerRegistry([ credentialsId: "dockerhub-id", url: "https://index.docker.io/v1/" ]){
